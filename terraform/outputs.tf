@@ -32,3 +32,13 @@ output "ecr_repository_url" {
   description = "URL of the ECR repository for the app image"
   value       = aws_ecr_repository.app.repository_url
 }
+
+output "ecs_task_execution_role_arn" {
+  description = "ARN of the ECS task execution role"
+  value       = aws_iam_role.ecs_task_execution.arn
+}
+
+output "ecs_task_role_arn" {
+  description = "ARN of the ECS task role (used by the app)"
+  value       = aws_iam_role.ecs_task.arn
+}
