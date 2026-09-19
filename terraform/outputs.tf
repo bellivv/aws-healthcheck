@@ -42,3 +42,15 @@ output "ecs_task_role_arn" {
   description = "ARN of the ECS task role (used by the app)"
   value       = aws_iam_role.ecs_task.arn
 }
+
+output "ecs_cluster_name" {
+  value = module.ecs.cluster_name
+}
+
+output "ecs_service_name" {
+  value = module.ecs.service_name
+}
+
+output "ecs_log_group_name" {
+  value = module.ecs.log_group_name
+}
