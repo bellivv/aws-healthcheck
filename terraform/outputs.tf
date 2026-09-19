@@ -27,3 +27,8 @@ output "ecs_security_group_id" {
   description = "Security group ID for the ECS service"
   value       = module.networking.ecs_security_group_id
 }
+
+output "ecr_repository_url" {
+  description = "URL of the ECR repository for the app image"
+  value       = aws_ecr_repository.app.repository_url
+}
