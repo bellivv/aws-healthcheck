@@ -17,7 +17,7 @@ venv/
 *.tfstate.backup
 *.tfvars
 !example.tfvars
-.terraform.lock.hcl
+!.terraform.lock.hcl
 
 # OS / editor junk
 .DS_Store
