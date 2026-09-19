@@ -35,3 +35,6 @@ variable "security_group_id" {
 variable "dynamodb_table_name" {
   type = string
 }
+variable "target_group_arn" {
+  type = string
+}

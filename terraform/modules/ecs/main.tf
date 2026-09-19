@@ -71,6 +71,12 @@ resource "aws_ecs_service" "app" {
     assign_public_ip = true
   }
 
+  load_balancer {
+    target_group_arn = var.target_group_arn
+    container_name   = "app"
+    container_port   = var.container_port
+  }
+
   tags = {
     Project = var.project_name
   }

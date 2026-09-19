@@ -54,3 +54,6 @@ output "ecs_service_name" {
 output "ecs_log_group_name" {
   value = module.ecs.log_group_name
 }
+output "alb_dns_name" {
+  value = module.alb.alb_dns_name
+}
