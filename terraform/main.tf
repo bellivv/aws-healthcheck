@@ -1,14 +1,5 @@
-resource "aws_dynamodb_table" "monitors" {
-  name         = "aws-healthcheck-monitors"
-  billing_mode = "PAY_PER_REQUEST"
-  hash_key     = "id"
-
-  attribute {
-    name = "id"
-    type = "S"
-  }
-
-  tags = {
-    Project = "aws-healthcheck"
-  }
+module "monitors_table" {
+  source       = "./modules/dynamodb"
+  table_name   = "${var.project_name}-monitors"
+  project_name = var.project_name
 }
