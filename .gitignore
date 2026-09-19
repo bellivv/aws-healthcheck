@@ -13,8 +13,7 @@ venv/
 
 # Terraform
 .terraform/
-*.tfstate
-*.tfstate.backup
+terraform.tfstate*
 *.tfvars
 !example.tfvars
 !.terraform.lock.hcl
