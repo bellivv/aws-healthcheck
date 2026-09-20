@@ -7,6 +7,10 @@ on:
       - 'app/**'
       - 'Dockerfile'
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -18,8 +22,7 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          role-to-assume: arn:aws:iam::228546880897:role/aws-healthcheck-github-actions-cd
           aws-region: ap-southeast-2
 
       - name: Log in to Amazon ECR
