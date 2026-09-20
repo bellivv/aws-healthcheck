@@ -7,6 +7,13 @@ terraform {
       version = "~> 5.0"
     }
   }
+
+  backend "s3" {
+    bucket       = "aws-healthcheck-tfstate-228546880897"
+    key          = "aws-healthcheck/terraform.tfstate"
+    region       = "ap-southeast-2"
+    use_lockfile = true
+  }
 }
 
 provider "aws" {
