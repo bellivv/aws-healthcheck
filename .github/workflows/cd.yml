@@ -1,0 +1,73 @@
+name: CD
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'app/**'
+      - 'Dockerfile'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-southeast-2
+
+      - name: Log in to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build and push image
+        id: build-image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: aws-healthcheck-app
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          echo "image_uri=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> "$GITHUB_OUTPUT"
+
+      - name: Deploy new image to app task definition
+        env:
+          IMAGE_URI: ${{ steps.build-image.outputs.image_uri }}
+        run: |
+          aws ecs describe-task-definition \
+            --task-definition aws-healthcheck-app \
+            --query 'taskDefinition' > app-task-def.json
+
+          jq --arg IMAGE "$IMAGE_URI" \
+            '.containerDefinitions[0].image = $IMAGE |
+             del(.taskDefinitionArn, .revision, .status, .requiresAttributes, .compatibilities, .registeredAt, .registeredBy)' \
+            app-task-def.json > new-app-task-def.json
+
+          aws ecs register-task-definition --cli-input-json file://new-app-task-def.json
+
+          aws ecs update-service \
+            --cluster aws-healthcheck-cluster \
+            --service aws-healthcheck-service \
+            --task-definition aws-healthcheck-app
+
+      - name: Deploy new image to checker task definition
+        env:
+          IMAGE_URI: ${{ steps.build-image.outputs.image_uri }}
+        run: |
+          aws ecs describe-task-definition \
+            --task-definition aws-healthcheck-checker \
+            --query 'taskDefinition' > checker-task-def.json
+
+          jq --arg IMAGE "$IMAGE_URI" \
+            '.containerDefinitions[0].image = $IMAGE |
+             del(.taskDefinitionArn, .revision, .status, .requiresAttributes, .compatibilities, .registeredAt, .registeredBy)' \
+            checker-task-def.json > new-checker-task-def.json
+
+          aws ecs register-task-definition --cli-input-json file://new-checker-task-def.json
