@@ -31,9 +31,9 @@ data "aws_iam_policy_document" "github_actions_assume_role" {
     }
 
     condition {
-      test     = "StringEquals"
-      variable = "token.actions.githubusercontent.com:sub"
-      values   = ["repo:bellivv/aws-healthcheck:ref:refs/heads/main"]
+    test     = "StringEquals"
+    variable = "token.actions.githubusercontent.com:sub"
+    values   = ["repo:bellivv@204091503/aws-healthcheck@1373817810:ref:refs/heads/main"]
     }
   }
 }
