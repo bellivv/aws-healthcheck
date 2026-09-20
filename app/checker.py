@@ -36,7 +36,10 @@ def run() -> None:
     for monitor in monitors:
         result = check_monitor(monitor)
         db.put_result(result)
-        print(f"  {monitor['name']}: {result['status']} ({result.get('status_code', result.get('error'))})")
+        if result["status"] == "down":
+            print(f"ALERT: {monitor['name']} ({monitor['url']}) is DOWN - {result.get('error', result.get('status_code'))}")
+        else:
+            print(f"  {monitor['name']}: {result['status']} ({result.get('status_code', result.get('error'))})")
 
 
 if __name__ == "__main__":
