@@ -43,3 +43,6 @@ variable "log_retention_days" {
   type        = number
   default     = 7
 }
+variable "results_table_name" {
+  type = string
+}

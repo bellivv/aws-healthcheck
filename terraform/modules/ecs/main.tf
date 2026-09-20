@@ -81,3 +81,40 @@ resource "aws_ecs_service" "app" {
     Project = var.project_name
   }
 }
+resource "aws_ecs_task_definition" "checker" {
+  family                   = "${var.project_name}-checker"
+  requires_compatibilities = ["FARGATE"]
+  network_mode             = "awsvpc"
+  cpu                      = "256"
+  memory                   = "512"
+  execution_role_arn       = var.task_execution_role_arn
+  task_role_arn            = var.task_role_arn
+
+  container_definitions = jsonencode([
+    {
+      name      = "checker"
+      image     = var.container_image
+      essential = true
+      command   = ["python", "-m", "app.checker"]
+
+      environment = [
+        { name = "MONITORS_TABLE_NAME", value = var.dynamodb_table_name },
+        { name = "RESULTS_TABLE_NAME", value = var.results_table_name },
+        { name = "AWS_REGION", value = var.aws_region },
+      ]
+
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          "awslogs-group"         = aws_cloudwatch_log_group.app.name
+          "awslogs-region"        = var.aws_region
+          "awslogs-stream-prefix" = "checker"
+        }
+      }
+    }
+  ])
+
+  tags = {
+    Project = var.project_name
+  }
+}

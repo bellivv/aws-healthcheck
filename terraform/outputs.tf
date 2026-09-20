@@ -64,3 +64,6 @@ output "results_table_name" {
 output "results_table_arn" {
   value = module.results_table.table_arn
 }
+output "checker_task_definition_arn" {
+  value = module.ecs.checker_task_definition_arn
+}

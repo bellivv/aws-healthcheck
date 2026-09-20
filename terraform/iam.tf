@@ -44,6 +44,14 @@ data "aws_iam_policy_document" "dynamodb_access" {
     ]
     resources = [module.monitors_table.table_arn]
   }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "dynamodb:PutItem",
+    ]
+    resources = [module.results_table.table_arn]
+  }
 }
 
 resource "aws_iam_policy" "dynamodb_access" {
