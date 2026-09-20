@@ -14,3 +14,4 @@ A URL uptime monitoring service
 
 Python · FastAPI · Docker · Terraform · AWS (ECS/Fargate, ALB, DynamoDB,
 CloudWatch, EventBridge, IAM) · GitHub Actions
+# CI test
