@@ -30,7 +30,7 @@ module "ecs" {
   source                  = "./modules/ecs"
   project_name            = var.project_name
   aws_region              = var.aws_region
-  container_image         = "${aws_ecr_repository.app.repository_url}:v2"
+  container_image         = "${aws_ecr_repository.app.repository_url}:v3"
   task_execution_role_arn = aws_iam_role.ecs_task_execution.arn
   task_role_arn           = aws_iam_role.ecs_task.arn
   subnet_ids              = module.networking.public_subnet_ids
