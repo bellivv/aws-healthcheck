@@ -28,4 +28,4 @@ def create_monitor(payload: MonitorCreate):
 
 @app.get("/monitors")
 def list_monitors():
-    return db.list_monitors()
+    return db.list_monitors()# CD pipeline test
