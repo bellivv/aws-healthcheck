@@ -9,6 +9,14 @@ module "monitors_table" {
   project_name = var.project_name
 }
 
+module "results_table" {
+  source         = "./modules/dynamodb"
+  table_name     = "${var.project_name}-results"
+  project_name   = var.project_name
+  hash_key_name  = "monitor_id"
+  range_key_name = "checked_at"
+}
+
 module "alb" {
   source             = "./modules/alb"
   project_name       = var.project_name
@@ -28,7 +36,9 @@ module "ecs" {
   subnet_ids              = module.networking.public_subnet_ids
   security_group_id       = module.networking.ecs_security_group_id
   dynamodb_table_name     = module.monitors_table.table_name
-  target_group_arn        = module.alb.target_group_arn
+  target_group_arn       = module.alb.target_group_arn
+    log_retention_days = var.log_retention_days
 
   depends_on = [module.alb]
 }
+

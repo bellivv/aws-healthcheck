@@ -9,3 +9,8 @@ variable "project_name" {
   type        = string
   default     = "aws-healthcheck"
 }
+variable "log_retention_days" {
+  description = "Number of days to retain CloudWatch logs for the app"
+  type        = number
+  default     = 7
+}

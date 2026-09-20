@@ -57,3 +57,10 @@ output "ecs_log_group_name" {
 output "alb_dns_name" {
   value = module.alb.alb_dns_name
 }
+output "results_table_name" {
+  value = module.results_table.table_name
+}
+
+output "results_table_arn" {
+  value = module.results_table.table_arn
+}
