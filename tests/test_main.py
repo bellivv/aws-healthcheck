@@ -30,3 +30,6 @@ def test_list_monitors(monkeypatch):
     response = client.get("/monitors")
     assert response.status_code == 200
     assert response.json() == fake_monitors
+
+def test_intentional_failure():
+    assert False, "testing branch protection"
