@@ -12,7 +12,7 @@ app = FastAPI(title="AWS HealthCheck")
 
 @app.get("/health")
 def health():
-    return {"status": "ok"}
+    return {"status": "ok", "version": "1.1.0"}
 
 
 @app.post("/monitors", response_model=Monitor, status_code=201)
